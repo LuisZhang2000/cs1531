@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block body %}
+<img src="https://easydrawingguides-7512.kxcdn.com/wp-content/uploads/2017/01/How-to-Draw-a-cartoon-car-20.png" width="100px" height="100px"/>
+
+<br/>
+
+<div>
+  <h2>{{car}}</h2>
+</div>
+
+
+<!--
+Here are some HTML tags you might find useful:
+
+  Form:               <form method="POST"></form>
+  Input field:        <input name="field_name" value="placeholder string"/>
+  Readonly field:     ??? (figure it out yourself)
+
+  Section:            <div></div>
+  Newline:            <br>
+  Red text:           <font size="3" color="red">ERROR MESSAGE</font> 
+  Submit button:      <button name="button_name" type="submit">Say Hi!</button>
+-->
+
+<!--
+{% raw %} This tag is to prevent Jinja from converting any of the Jinja templates below
+
+Here are some Jinja templates you might find useful:
+
+  1. Printing a variable:                       {{variable}}
+  2. If statement to check if variable exists:  {% if var %} ... {% endif %}
+  3. If statement with multiple conditions:     {% if var and var.name == 'Isaac' %}
+  4. If-Else statement:                         ???
+  5. For loop:                                  {% for booking in bookings %} ... {% endfor %}
+  6. Advanced features that may be useful for cleaner Jinja templating: 
+        {% macro %}, {% block %}, more at http://jinja.pocoo.org/docs/2.10/templates/
+
+{% endraw %}
+-->
+
+<div>
+<!-- 
+  Complete this section
+-->
+<form method="POST">
+    {% if bookingform is defined %}
+        {% if bookingform.is_valid == true %}
+            <h3>Input valid</h3>
+            <input name="customer_name" value="{{bookingform.customer_name}}"/> Customer Name <br>
+            <input name="customer_licence" value="{{bookingform.customer_licence}}"/> Customer License <br>
+            <input name="start_location" value="{{bookingform.start_location}}"/> Start Location <br>
+            <input name="end_location" value="{{bookingform.end_location}}"/> End Location <br>
+            <input type="date" name="start_date" value="{{bookingform.start_date.strftime('%Y-%m-%d')}}"/> Start Date <br>
+            <input type="date" name="end_date" value="{{bookingform.end_date.strftime('%Y-%m-%d')}}"/> End Date <br>
+            <br>
+            
+            Total fee: {{ car.get_fee((bookingform.end_date - bookingform.start_date).days) }}
+            
+            <br>
+            <br>
+            <button name="confirm_button" type="submit">Confirm Booking</button>
+            <button name="cancel_button" onclick="location.href='{{ url_for('cars') }}'" type="button">Cancel</button>
+            
+        {% else %}
+            <h3>Input error</h3>
+            {% if bookingform.has_error("customer_name") %}
+                <input name="customer_name" value="{{bookingform.get_raw_data(customer_name)}}"/> Customer Name <br>
+                <font size="3" color="red">{{ bookingform.get_error("customer_name")}}</font> <br>
+            {% else %}
+                <input name="customer_name" value="{{bookingform.customer_name}}"/> Customer Name <br>
+            {% endif %}
+            
+            {% if bookingform.has_error("customer_licence") %}
+                <input name="customer_licence" value="{{bookingform.get_raw_data(customer_licence)}}"/> Customer License <br>
+                <font size="3" color="red">{{ bookingform.get_error("customer_licence")}}</font> <br>
+            {% else %}
+                <input name="customer_licence" value="{{bookingform.customer_licence}}"/> Customer License <br>
+            {% endif %}            
+            
+            {% if bookingform.has_error("start_location") %}
+                <input name="start_location" value="{{bookingform.get_raw_data(start_location)}}"/> Start Location <br>
+                <font size="3" color="red">{{ bookingform.get_error("start_location")}}</font> <br>
+            {% else %}
+                <input name="start_location" value="{{bookingform.start_location}}"/> Start Location <br>
+            {% endif %}            
+            
+            {% if bookingform.has_error("end_location") %}
+                <input name="end_location" value="{{bookingform.get_raw_data(end_location)}}"/> End Location <br>
+                <font size="3" color="red">{{ bookingform.get_error("end_location")}}</font> <br>
+            {% else %}
+                <input name="end_location" value="{{bookingform.end_location}}"/> End Location <br>
+            {% endif %}
+            
+            {% if bookingform.has_error("start_date") %}
+                <input type="date" name="start_date" value="{{bookingform.get_raw_data(start_date)}}"/> Start Date <br>
+                <font size="3" color="red">{{ bookingform.get_error("start_date")}}</font> <br>
+            {% else %}
+                <input type="date" name="start_date" value="{{bookingform.start_date.strftime('%Y-%m-%d')}}"/> Start Date <br>
+            {% endif %}
+            
+            {% if bookingform.has_error("end_date") %}
+                <input type="date" name="end_date" value="{{bookingform.get_raw_data(end_date)}}"/> End Date <br>    
+                <font size="3" color="red">{{ bookingform.get_error("end_date")}}</font> <br>
+            {% else %}
+                <input type="date" name="end_date" value="{{bookingform.end_date.strftime('%Y-%m-%d')}}"/> End Date <br>
+            {% endif %}
+            
+			<font size="3" color="red">{{ bookingform.get_error("period") }}</font> <br>
+			
+            <button name="check_button" type="submit">Check Booking</button>
+        {% endif %}
+    {% else %}
+        <h3>No booking yet</h3>
+        <input name="customer_name" value=""/> Customer Name <br>
+        <input name="customer_licence" value=""/> Customer License <br>
+        <input name="start_location" value=""/> Start Location <br>
+        <input name="end_location" value=""/> End Location <br>
+        <input type="date" name="start_date"/ > Start Date <br>
+        <input type="date" name="end_date"/> End Date <br>    
+        <button name="submit_button" type="submit">Check Booking</button>
+    {% endif %}
+    
+</form>
+
+</div>
+{% endblock %}
+
